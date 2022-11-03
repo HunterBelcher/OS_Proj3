@@ -31,5 +31,16 @@ void pzip(int n_threads, char *input_chars, int input_chars_size,
 	  struct zipped_char *zipped_chars, int *zipped_chars_count,
 	  int *char_frequency);
 
+typedef struct thread_args {
+  int start_idx;
+  int len;
+  char *input_chars;
+  int *zipped_counts;
+  int *char_frequency;
+  int thread_idx;
+  struct zipped_char *zipped_chars;
+} thread_args;
+
+void *pack_section(void *arguments);
 
 #endif /* PZIP_H */
