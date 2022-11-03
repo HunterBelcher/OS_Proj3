@@ -65,6 +65,7 @@ printf(":_________:      `.____________________   `-.___.-. \n");
 printf("                  .'.eeeeeeeeeeeeeeeeee.'.      :___:\n");
 printf("fsc            .'.eeeeeeeeeeeeeeeeeeeeee.'.         \n");
 printf("               :____________________________:\n");
+printf("If you're running input_huge, it typically takes about 2 minutes\n");
 
   for (int i = 0; i<n_threads;i++)
   {
