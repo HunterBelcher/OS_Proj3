@@ -92,7 +92,10 @@ void *pack_section(void *arguments)
     exit(1);
   }
   int char_counter = 1;
-  struct zipped_char local_zip[args->len];
+  printf("%d: Length: %d\n", args->thread_idx, args->len);
+  printf("%d: start_idx: %d\n", args->thread_idx, args->start_idx);
+  printf("%d: Made it to the for loop\n", args->thread_idx);
+  struct zipped_char *local_zip = malloc(args->len * sizeof(struct zipped_char));
   int zipped_arr_idx = 0;
 
   for(int i=args->start_idx + 1; i < args->start_idx + args->len; i++)
@@ -102,7 +105,7 @@ void *pack_section(void *arguments)
       fprintf(stderr, "A Syscall Failed");
       exit(1);
     }
-    args->char_frequency[args->input_chars[i] - 'a']++;
+    args->char_frequency[(args->input_chars[i] - 'a') % 26]++;
     if(pthread_mutex_unlock(&char_frequency_lock))
     {
       fprintf(stderr, "A Syscall Failed");
@@ -121,20 +124,22 @@ void *pack_section(void *arguments)
       last_char = args->input_chars[i];
     }
   }
+  printf("%d: Finished the for loop\n", args->thread_idx);
   local_zip[args->zipped_counts[args->thread_idx]].character = last_char;
   local_zip[args->zipped_counts[args->thread_idx]].occurence = char_counter;
   args->zipped_counts[args->thread_idx]++;
-  char_counter = 1;
   pthread_barrier_wait(&barrier);
   for(int i = 0; i<args->thread_idx; i++)
   {
     zipped_arr_idx += args->zipped_counts[i];
   }
+  printf("Zipped array idx: %d\n", zipped_arr_idx);
   for(int i = 0; i<args->zipped_counts[args->thread_idx]; i++)
   {
     args->zipped_chars[zipped_arr_idx].character = local_zip[i].character;
     args->zipped_chars[zipped_arr_idx].occurence = local_zip[i].occurence;
     zipped_arr_idx++;
   }
+  free(local_zip);
   return NULL;
 }
