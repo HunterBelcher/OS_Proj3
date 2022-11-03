@@ -46,6 +46,26 @@ void pzip(int n_threads, char *input_chars, int input_chars_size,
     exit(1);
   }
 
+// Original ASCI Art Credit to Marcin Glinski
+printf("                        ______                     \n");
+printf("_________        .---"""      """---.              \n");
+printf(":______.-':      :  .--------------.  :             \n");
+printf("| ______  |      | :                : |             \n");
+printf("|:______B:|      | |  BEEP BOOP :   | |             \n");
+printf("|:______B:|      | |                | |             \n");
+printf("|:______B:|      | | Creating %d     | |             \n", n_threads);
+printf("|         |      | |  threads and   | |             \n");
+printf("|:_____:  |      | |  calculating   | |             \n");
+printf("|    ==   |      | :  your zip file : |             \n");
+printf("|       O |      :  '--------------'  :             \n");
+printf("|       o |      :'---...______...---'              \n");
+printf("|       o |-._.-i___/'             \\._              \n");
+printf("|'-.____o_|   '-.   '-...______...-'  `-._          \n");
+printf(":_________:      `.____________________   `-.___.-. \n");
+printf("                  .'.eeeeeeeeeeeeeeeeee.'.      :___:\n");
+printf("fsc            .'.eeeeeeeeeeeeeeeeeeeeee.'.         \n");
+printf("               :____________________________:\n");
+
   for (int i = 0; i<n_threads;i++)
   {
     arg_array[i].start_idx = (i) * chars_per_thread;
@@ -92,9 +112,6 @@ void *pack_section(void *arguments)
     exit(1);
   }
   int char_counter = 1;
-  printf("%d: Length: %d\n", args->thread_idx, args->len);
-  printf("%d: start_idx: %d\n", args->thread_idx, args->start_idx);
-  printf("%d: Made it to the for loop\n", args->thread_idx);
   struct zipped_char *local_zip = malloc(args->len * sizeof(struct zipped_char));
   int zipped_arr_idx = 0;
 
@@ -124,7 +141,6 @@ void *pack_section(void *arguments)
       last_char = args->input_chars[i];
     }
   }
-  printf("%d: Finished the for loop\n", args->thread_idx);
   local_zip[args->zipped_counts[args->thread_idx]].character = last_char;
   local_zip[args->zipped_counts[args->thread_idx]].occurence = char_counter;
   args->zipped_counts[args->thread_idx]++;
@@ -133,7 +149,6 @@ void *pack_section(void *arguments)
   {
     zipped_arr_idx += args->zipped_counts[i];
   }
-  printf("Zipped array idx: %d\n", zipped_arr_idx);
   for(int i = 0; i<args->zipped_counts[args->thread_idx]; i++)
   {
     args->zipped_chars[zipped_arr_idx].character = local_zip[i].character;
